@@ -78,11 +78,14 @@ No hay tests. Es un paquete de tipos con cuatro helpers puros; `tsc` es la verif
 - Target ES2022, `moduleResolution: "Bundler"`.
 - Publicable: `files: ["dist"]` + `publishConfig.access: "public"`.
 
-## Advertencia sobre `src/api.ts`
+## Versionado
 
-Este módulo mezcla dos generaciones de contratos y **13 de sus tipos no los consume nadie**.
-Incluye dos vocabularios de roles que se contradicen (`UserRole` vs `Role`) y un modelo
-multi-tenant (`TenantScoped`, `ProjectSummary`) que no corresponde al producto actual.
+Semver. Estos contratos los consumen tres repos, así que un cambio incompatible acá rompe a los
+tres a la vez.
 
-**Hay que resolverlo antes de publicar en npm**, porque publicar ata esos tipos a semver. Ver
-[`STATUS.md`](STATUS.md).
+- Agregar un tipo o un campo opcional → minor.
+- Cambiar o quitar un tipo, o volver requerido un campo opcional → major.
+
+`src/api.ts` incluye tipos de endpoints todavía no construidos (checkout, suscripciones, admin).
+Están declarados a propósito, por anticipado, y corresponden a funcionalidad marcada `PLANEADO`
+en el `STATUS.md` de `luxsequencer-cloud`.

@@ -19,53 +19,49 @@ Toda fila `IMPLEMENTADO` o `PARCIAL` **debe citar un archivo**.
 |---|---|---|---|
 | Contratos de controles declarativos | IMPLEMENTADO | `src/declarativeControls.ts` | Consumido por core y core-renderers |
 | Contratos de marketplace + helpers de identidad | IMPLEMENTADO | `src/marketplace.ts` | Único módulo con código en runtime |
-| Contratos de API de cloud | PARCIAL | `src/api.ts` | Ver "Deuda crítica": 13 tipos sin consumidores y vocabularios en conflicto |
+| Contratos de API de cloud | IMPLEMENTADO | `src/api.ts` | Modelo multi-tenant huérfano eliminado 2026-08-06 |
 | Entry points por subpath | IMPLEMENTADO | `package.json` → `exports` | `.`, `/declarative-controls`, `/marketplace`, `/api` |
 | Build de tipos + declaraciones | IMPLEMENTADO | `tsconfig.json`, script `build` | `declaration` + `declarationMap` |
 | Repositorio git | IMPLEMENTADO | este repo | Creado 2026-08-06. **Sin remoto todavía** |
 | Licencia MIT | IMPLEMENTADO | `LICENSE` | Agregada 2026-08-06 |
-| Publicable en npm | PARCIAL | `package.json` → `publishConfig`, `files` | `private: true` removido. **No publicado todavía** |
-| Publicación en npm | PLANEADO | — | Bloqueada por la limpieza de `src/api.ts` |
+| Publicable en npm | IMPLEMENTADO | `package.json` → `publishConfig`, `files` | `npm publish --dry-run` limpio, 8 kB |
+| Publicación en npm | PLANEADO | — | Falta `npm adduser` + crear la org `luxsequencer` |
 | Remoto en GitHub | PLANEADO | — | `repository` ya apunta a la URL prevista; el repo no existe aún |
 | Build CJS | DESCARTADO | — | ESM únicamente. Todos los consumidores son bundlers modernos |
 | Tests | DESCARTADO | — | Paquete de tipos; `tsc` es la verificación. Revisar si `marketplace.ts` crece |
 | Matriz de compatibilidad | PLANEADO | — | Qué versión de contracts va con qué versión de core/cloud |
 
-## Deuda crítica
+## Resuelto: limpieza de `src/api.ts` (2026-08-06)
 
-**`src/api.ts` mezcla dos generaciones de contratos, y hay que resolverlo antes de publicar.**
-Publicar en npm ata estos tipos a semver: sacarlos después es un breaking change.
+`api.ts` mezclaba dos generaciones de contratos. Se resolvió antes de publicar, porque publicar
+en npm ata los tipos a semver y sacarlos después habría sido un breaking change.
 
-Verificado el 2026-08-06 — 13 tipos exportados con **cero consumidores** en `luxsequencer-cloud`,
-`luxsequencer-core` y `core-renderers`. Se separan en dos grupos con tratamiento distinto:
+**Eliminado — modelo multi-tenant huérfano** (8 tipos, cero consumidores):
+`TenantScoped`, `ProjectSummary`, `PublishRendererRequest`, `PublishRendererResponse`,
+`RendererPackageRef`, `UserRef`, `PaginatedResponse`, `Role`.
 
-**Grupo A — modelo multi-tenant huérfano.** No corresponde al producto actual y contradice al
-resto del archivo:
+Motivo: hablaban de *tenants*, *projects* y *collaborators* cuando el producto tiene *users* y
+*performances*; no existen esas tablas en `luxsequencer-cloud/supabase-schema.sql`; y
+`Role = 'admin' | 'editor' | 'viewer'` contradecía a `UserRole = 'user' | 'creator' | 'admin'`
+definido en el mismo archivo.
 
-- `TenantScoped`, `ProjectSummary`, `PublishRendererRequest`, `PublishRendererResponse`,
-  `RendererPackageRef`, `UserRef`, `PaginatedResponse`, `Role`
-- Habla de *tenants*, *projects* y *collaborators*; el producto tiene *users* y *performances*.
-- `Role = 'admin' | 'editor' | 'viewer'` **contradice** a `UserRole = 'user' | 'creator' | 'admin'`
-  definido en el mismo archivo. Dos vocabularios de roles incompatibles conviviendo.
-- No hay tabla de tenants ni de projects en `luxsequencer-cloud/supabase-schema.sql`.
+**Conservado — superficie de API planeada pero no construida.** Corresponde a funcionalidad
+marcada `PLANEADO` en el `STATUS.md` de cloud (Stripe, admin), así que es contrato legítimo por
+anticipado y no exploración:
+`CreateCheckoutSessionRequest/Response/Error`, `SubscriptionStatusResponse`,
+`CreateSubscriptionSessionResponse`, `UpdatePluginStatusRequest`, `UpdateCommissionRequest`,
+`PluginDetailResponse`.
 
-**Grupo B — superficie de API planeada pero no construida.** Es legítima: corresponde a
-funcionalidad marcada `PLANEADO` en el `STATUS.md` de cloud (Stripe, admin):
-
-- `CreateCheckoutSessionRequest`, `CreateCheckoutSessionResponse`, `CreateCheckoutSessionError`,
-  `SubscriptionStatusResponse`, `CreateSubscriptionSessionResponse`,
-  `UpdatePluginStatusRequest`, `UpdateCommissionRequest`, `PluginDetailResponse`
-
-**Decisión pendiente**: probablemente borrar el grupo A y conservar el grupo B. Requiere
-confirmación del autor: el grupo A puede ser exploración de un modelo de producto a futuro, y en
-ese caso el lugar es un documento de diseño, no un contrato publicado.
+Verificado tras la eliminación: `core` y `cloud` type-check limpio, 27/27 tests en cloud.
 
 ## Deuda no crítica
 
 - **`repository` en `package.json` es una suposición**: sigue el patrón de los otros repos
   (`github.com/criistianlevrero/luxsequencer-contracts`), pero el remoto no existe. Corregir si
   el nombre final es otro.
-- **Versión `0.1.0-alpha.0`**: definir si el primer publish sale como `0.1.0-alpha.0` o `0.1.0`.
+- ~~Versión~~ **Resuelto**: `0.1.0`. Se descartó `0.1.0-alpha.0` porque npm trata las prerelease
+  como tal — exige `--tag alpha` y **no quedan como `latest`**, así que un `npm install`
+  sin versión explícita no las recibe.
 - **Sin matriz de compatibilidad**: hoy nada declara qué versión de contracts corresponde a qué
   versión de core o cloud.
 - **`luxsequencer-core` no consume `api.ts`**, aunque el plan es que core llame a la API de

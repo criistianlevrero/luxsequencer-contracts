@@ -1,6 +1,6 @@
 {
   "name": "@luxsequencer/contracts",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Shared type contracts for LuxSequencer core, cloud and marketplace repos",
   "license": "MIT",
   "repository": {
