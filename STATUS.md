@@ -22,11 +22,11 @@ Toda fila `IMPLEMENTADO` o `PARCIAL` **debe citar un archivo**.
 | Contratos de API de cloud | IMPLEMENTADO | `src/api.ts` | Modelo multi-tenant huérfano eliminado 2026-08-06 |
 | Entry points por subpath | IMPLEMENTADO | `package.json` → `exports` | `.`, `/declarative-controls`, `/marketplace`, `/api` |
 | Build de tipos + declaraciones | IMPLEMENTADO | `tsconfig.json`, script `build` | `declaration` + `declarationMap` |
-| Repositorio git | IMPLEMENTADO | este repo | Creado 2026-08-06. **Sin remoto todavía** |
+| Repositorio git | IMPLEMENTADO | este repo | Creado y pusheado 2026-08-06 |
 | Licencia MIT | IMPLEMENTADO | `LICENSE` | Agregada 2026-08-06 |
 | Publicable en npm | IMPLEMENTADO | `package.json` → `publishConfig`, `files` | `npm publish --dry-run` limpio, 8 kB |
-| Publicación en npm | PLANEADO | — | Falta `npm adduser` + crear la org `luxsequencer` |
-| Remoto en GitHub | PLANEADO | — | `repository` ya apunta a la URL prevista; el repo no existe aún |
+| Publicación en npm | PLANEADO | — | Org `luxsequencer` creada. Falta `npm login` en la máquina |
+| Remoto en GitHub | IMPLEMENTADO | `criistianlevrero/luxsequencer-contracts` | Push vía SSH. `repository` en package.json usa la URL HTTPS, que es lo convencional para npm |
 | Build CJS | DESCARTADO | — | ESM únicamente. Todos los consumidores son bundlers modernos |
 | Tests | DESCARTADO | — | Paquete de tipos; `tsc` es la verificación. Revisar si `marketplace.ts` crece |
 | Matriz de compatibilidad | PLANEADO | — | Qué versión de contracts va con qué versión de core/cloud |
