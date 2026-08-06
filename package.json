@@ -1,0 +1,46 @@
+{
+  "name": "@luxsequencer/contracts",
+  "version": "0.1.0-alpha.0",
+  "description": "Shared type contracts for LuxSequencer core, cloud and marketplace repos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/criistianlevrero/luxsequencer-contracts.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./declarative-controls": {
+      "types": "./dist/declarativeControls.d.ts",
+      "import": "./dist/declarativeControls.js"
+    },
+    "./marketplace": {
+      "types": "./dist/marketplace.d.ts",
+      "import": "./dist/marketplace.js"
+    },
+    "./api": {
+      "types": "./dist/api.d.ts",
+      "import": "./dist/api.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
