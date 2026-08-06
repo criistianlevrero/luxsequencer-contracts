@@ -25,7 +25,7 @@ Toda fila `IMPLEMENTADO` o `PARCIAL` **debe citar un archivo**.
 | Repositorio git | IMPLEMENTADO | este repo | Creado y pusheado 2026-08-06 |
 | Licencia MIT | IMPLEMENTADO | `LICENSE` | Agregada 2026-08-06 |
 | Publicable en npm | IMPLEMENTADO | `package.json` → `publishConfig`, `files` | `npm publish --dry-run` limpio, 8 kB |
-| Publicación en npm | PLANEADO | — | Org `luxsequencer` creada. Falta `npm login` en la máquina |
+| Publicación en npm | PLANEADO | — | Org creada y sesión iniciada (`cristianlevrero`, owner). Bloqueado por 2FA: `npm publish` exige OTP interactivo |
 | Remoto en GitHub | IMPLEMENTADO | `criistianlevrero/luxsequencer-contracts` | Push vía SSH. `repository` en package.json usa la URL HTTPS, que es lo convencional para npm |
 | Build CJS | DESCARTADO | — | ESM únicamente. Todos los consumidores son bundlers modernos |
 | Tests | DESCARTADO | — | Paquete de tipos; `tsc` es la verificación. Revisar si `marketplace.ts` crece |
